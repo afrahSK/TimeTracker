@@ -1,0 +1,9 @@
+A time tracking application in react
+=>features:
+->authentication
+->allow users to start, pause and stop timer 
+->provide analysis and report of time spent on each task
+->takes task name as input and a start button
+->stop button asks prompt about task name and a confirmation
+and the task gets added to the completed tasks list with 
+start and end time

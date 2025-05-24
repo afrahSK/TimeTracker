@@ -1,0 +1,66 @@
+# ========================
+# Node dependencies
+# ========================
+# Backend
+/backend/node_modules
+# Frontend
+/frontend/node_modules
+
+# ========================
+# Build output
+# ========================
+# Frontend build
+/frontend/build
+# Backend (if you ever compile/transpile)
+/backend/dist
+/backend/build
+
+# ========================
+# Environment files
+# ========================
+.env
+.env.*.local
+# Specifically ignore any per‐env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ========================
+# Logs
+# ========================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/backend/**/*.log
+/frontend/**/*.log
+
+# ========================
+# Testing
+# ========================
+/coverage
+/frontend/coverage
+/backend/coverage
+
+# ========================
+# Miscellaneous
+# ========================
+# macOS
+.DS_Store
+# Editor directories and files
+.vscode/
+.idea/
+/*.suo
+/*.ntvs*
+/*.njsproj
+/*.sln
+
+# Yarn PnP
+.pnp.js
+.pnp.cjs
+
+# Optional lock files (if you use pnpm)
+/pnpm-lock.yaml
+
+# OS files
+Thumbs.db

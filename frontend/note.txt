@@ -7,3 +7,16 @@ A time tracking application in react
 ->stop button asks prompt about task name and a confirmation
 and the task gets added to the completed tasks list with 
 start and end time
+
+supabase auth
+->uses JWT
+->uses postgres db
+->supabase sdk's manage persistence, refresh, and removal of
+auth tokens
+->When you deploy a new Supabase project, we deploy an 
+instance of this server alongside your database, and 
+inject your database with the required Auth schema.
+
+=>getting started with supabase auth
+->using auth-ui-react
+

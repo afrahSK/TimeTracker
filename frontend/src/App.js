@@ -1,11 +1,32 @@
-import React,{useState} from 'react'
+import React from 'react'
 import Home from './Home.jsx'
 import Track from './Track.jsx'
 import Register from './Register.jsx'
-import './App.css'
+import { useState, useEffect } from 'react'
 import {BrowserRouter,Routes,Route} from "react-router-dom";
+import {supabase} from './supabase-client.js'
+import './App.css'
 const App = () => {
-  
+
+  const [session,setSession] = useState(null);
+
+  const fetchSession = async()=>{
+    const currentSession = await supabase.auth.getSession()
+    console.log(currentSession);
+    setSession(currentSession.data);
+  }
+
+  useEffect(()=>{
+    fetchSession();
+
+    const {}= supabase.auth.onAuthStateChange(_event, session) => {
+
+    }
+  }, []);
+
+  const logout = async() =>{
+    await supabase.auth.signOut();
+  }
   return (
     <div>
       <BrowserRouter>

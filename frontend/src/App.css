@@ -90,7 +90,9 @@ body{
   position: relative;
   animation: slideIn 0.3s ease;
 }
-
+.modal-content h2{
+  text-align: center;
+}
 /* ==== Close Button ==== */
 .close-btn {
   position: absolute;
@@ -120,9 +122,9 @@ body{
 /* ==== Form Group for Names ==== */
 .form-group {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
 }
 
 
@@ -154,4 +156,18 @@ body{
 
 .a-login:hover {
   text-decoration: underline;
+}
+.btn-register{
+  padding: 0.75rem;
+  border-radius: 10px;
+  text-transform: uppercase;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  border: none;
+  font-size: 0.95rem;
+  background-color: #c4a64d;
+  color: white;
+  margin-bottom: 1rem;
+}
+.btn-register:hover{
+  cursor:pointer;
 }

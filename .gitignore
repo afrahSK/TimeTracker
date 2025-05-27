@@ -11,6 +11,7 @@
 # ========================
 # Frontend build
 /frontend/build
+/frontend/note.txt
 # Backend (if you ever compile/transpile)
 /backend/dist
 /backend/build

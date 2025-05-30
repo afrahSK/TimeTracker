@@ -1,40 +1,37 @@
 import React from 'react'
-import Home from './Home.jsx'
-import Track from './Track.jsx'
-import Register from './Register.jsx'
+import Navbar from './components/Navbar.jsx'
+import Track from './components/Track.jsx'
+import TrackDummy from './components/TrackDummy.jsx'
+import Register from './components/Register.jsx'
+import Reports from './components/Reports.jsx'
+import Home from './components/Home.jsx'
+import Account from './components/Account.jsx'
+import MyActivities from './components/MyActivities.jsx'
 import { useState, useEffect } from 'react'
 import {BrowserRouter,Routes,Route} from "react-router-dom";
 import {supabase} from './supabase-client.js'
 import './App.css'
+import Sidebar from './components/Sidebar.jsx'
 const App = () => {
 
-  const [session,setSession] = useState(null);
-
-  const fetchSession = async()=>{
-    const currentSession = await supabase.auth.getSession()
-    console.log(currentSession);
-    setSession(currentSession.data);
-  }
-
-  useEffect(()=>{
-    fetchSession();
-
-    const {}= supabase.auth.onAuthStateChange(_event, session) => {
-
-    }
-  }, []);
-
-  const logout = async() =>{
-    await supabase.auth.signOut();
-  }
+  
   return (
     <div>
       <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Home/>}/>
-          <Route path='/track' element={<Track/>}/>
+        <Navbar/>
+      <div className='left' style={{ display: 'flex' }}>
+        <Sidebar/>
+        <div style={{ flex: 1, padding: '20px',minWidth: '100vh' }}>
+            <Routes>
+          <Route path='/' element={<Track/>}/>
           <Route path='/register' element={<Register/>}/>
+          <Route path='/track' element={<Track/>}/>
+          <Route path='/MyActivities' element={<MyActivities/>}/>
+          <Route path='/Account' element={<Account/>}/>
+          <Route path='/Reports' element={<Reports/>}/>
         </Routes>
+        </div>
+      </div>
       </BrowserRouter>
     </div>
   )

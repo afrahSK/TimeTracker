@@ -20,3 +20,16 @@ inject your database with the required Auth schema.
 =>getting started with supabase auth
 ->using auth-ui-react
 
+=>session based authentication -> server
+->session is stored on server and cookies in the browser
+->request with cookie
+->response with session ID
+->vulnerable to attacks known as cross-site request forgery
+
+=>token based authentication -> client
+->generates json web token
+->browser puts jwt in local storage
+->signed jwt header validated, on future requests
+->tokens can still be hijacked
+
+if a user is signed in , we will display their Track compoent, if not then just display the common home page

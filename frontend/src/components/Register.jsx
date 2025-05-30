@@ -1,8 +1,8 @@
 import React from 'react'
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import {supabase} from "./supabase-client";
-const Register = ({ isOpen, onClose }) => {
+import {supabase} from "../supabase-client";
+const Register = ({ isOpen, onClose, switchToLogin }) => {
 
   
   const [name,setName] = useState("");
@@ -12,7 +12,7 @@ const Register = ({ isOpen, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("working");
-    const {error: signUpError} = await supabase.auth.signUp({name, email, password});
+    const {error: signUpError} = await supabase.auth.signUp({email, password});
     if(signUpError){
       console.log("Error signing up:", signUpError.message);
       return;
@@ -63,7 +63,7 @@ const Register = ({ isOpen, onClose }) => {
 
             <button type="submit" className="btn-register">Create account</button>
             <p>Already have an account?</p>
-            <a className="a-login" style={{ cursor: "pointer", color: "blue" }} href='#'>Login</a>
+            <a className="a-login" style={{ cursor: "pointer", color: "blue" }} onClick={switchToLogin}>Login</a>
           </form>
         </div>
       </div>

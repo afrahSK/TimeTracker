@@ -3,6 +3,7 @@ import AddTaskIcon from '@mui/icons-material/AddTask';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import TimerIcon from '@mui/icons-material/Timer';
 export const SidebarData = [
     {
         title: "New Activity",
@@ -18,6 +19,11 @@ export const SidebarData = [
         title: "Reports",
         icon: <AssessmentIcon/>,
         link: "/Reports"
+    },
+    {
+        title: "Pomodoro",
+        icon: <TimerIcon/>,
+        link: "/pomodoro"
     },
     {
         title: "My Account",

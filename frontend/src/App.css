@@ -9,18 +9,18 @@ body{
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: #0E2148;
+  background-color: #014f86;
   height: 3rem;
   padding: 1rem 4rem;
 }
 .logo{
   flex: 1;
-  color: #E3D095;
+  color: #00d5ff;
   margin: 1rem;
   font-size: 1.85rem;
 }
 .logo span{
-  color: #a590f0;
+  color: #caf0f8;
   font-size: 1.85rem;
 }
 .nav-items{
@@ -51,10 +51,10 @@ body{
   border-radius: 8px;
   text-transform: uppercase;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-  border: 2px solid #a590f0;
+  border: none;
   font-size: 0.95rem;
-  background-color: #483AA0;
-  color: white;
+  background-color: #89c2d9;
+  color: #013a63;
 }
 .btn-auth:hover{
   cursor: pointer;
@@ -176,7 +176,7 @@ body{
 /* sidebar */
 .sidebar{
   height: calc(100vh - 3rem);
-  background-color: #4f5f6d;
+  background-color: #468faf;
   width: 17vw;
 }
 .sidebarList{
@@ -332,4 +332,136 @@ body{
   flex-direction: row;
   gap: 1rem;
   padding-top: 1rem;
+}
+
+/* home */
+.home{
+  height: 85vh;
+  width: 100vw;
+  background: url(./assets/desk.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+.bg{
+  background-color: rgba(36, 30, 29, 0.6);
+  /* opacity: 0.6; */
+  height: 100%;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.home-img{
+  height: 100%;
+  width: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.home-txt{
+  color: white;
+  font-family: "Staatliches", sans-serif;
+  font-size: 4rem;
+}
+.home-para{
+  color: white;
+  font-size: 1.25rem;
+}
+.home-btn{
+  background-color: #89c2d9;
+  padding: 1rem;
+  border-radius: 8px;
+  border: none;
+  color: #013a63;
+  font-size: 1rem;
+  cursor: pointer;
+} 
+
+/* my activities */
+.my-activities {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #89c2d9;
+  color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.my-activities h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #01497c;
+}
+
+/* Scrollable container for logs */
+.activities-scroll {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-top: 1rem;
+}
+
+.activities-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.activities-scroll::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 4px;
+}
+
+.activities-scroll::-webkit-scrollbar-track {
+  background-color: #1f1f1f;
+}
+
+.month-group {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #444;
+}
+
+.month-group h3 {
+  font-size: 1.4rem;
+  color: #01497c;
+  margin-bottom: 0.75rem;
+}
+
+.month-group ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.month-group li {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: background-color 0.2s ease;
+}
+
+.month-group li:hover {
+  background-color: #333;
+}
+
+.month-group li strong {
+  display: block;
+  font-size: 1.1rem;
+  color: #00bcd4;
+  margin-bottom: 0.3rem;
+}
+
+.no-activities {
+  text-align: center;
+  font-style: italic;
+  color: #999;
 }

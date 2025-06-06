@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
 import Sidebar from './Sidebar'
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase-client.js';
-const Navbar = () => {
+const Navbar = ({session}) => {
   const navigate = useNavigate();
   const [isRegisterOpen, setRegisterOpen] = useState(false);
   const [isLoginOpen, setLoginOpen] = useState(false);
-  const [loggedIn,setLoggedIn] = useState(false);
+
   const openRegister = () => {
     setRegisterOpen(true);
   }
@@ -23,14 +23,11 @@ const Navbar = () => {
     setLoginOpen(false);
   }
   const hangleLoginSuccess = () => {
-    
     closeLogin();
     navigate('/track');
-    setLoggedIn(true);
   }
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    setLoggedIn(false);
   }
   return (
     <>
@@ -39,12 +36,11 @@ const Navbar = () => {
           Time<span>Tracker</span>
         </div>
         <div className="nav-items">
-          <Link className='link' to='/'><li>Home</li></Link>
-          <Link className='link' to='/track'><li>About</li></Link>
         </div>
         <div className="auth">
           {
-            loggedIn ? (
+            session ? (
+              
               <>
                 <button className="btn-auth" onClick={handleLogout}>
                   Logout

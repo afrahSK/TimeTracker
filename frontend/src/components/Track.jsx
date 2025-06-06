@@ -2,6 +2,23 @@ import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../supabase-client.js'
 import Navbar from './Navbar.jsx';
 const Track = () => {
+  const addActivityLogs = async(activity,start_time,end_time) => {
+    console.log("Calling addActivityLogs:", { activity, start_time, end_time });
+     const{data, error} = await supabase.from('activities')
+     .insert([
+      {
+        activity:activity,
+        start_time:start_time,
+        end_time: end_time
+      }
+     ]);
+     if(error){
+      console.log("error:",error.message);
+     }else{
+      console.log("activity added:",data);
+     }
+  }
+
   const [session, setSession] = useState(null);
 
   const fetchSession = async () => {
@@ -9,10 +26,29 @@ const Track = () => {
     console.log(currentSession);
     setSession(currentSession.data.session);
   }
+  const fetchLogs = async () => {
+  const { data, error } = await supabase
+    .from('activities')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.log("Error fetching logs:", error.message);
+  } else {
+    const formatted = data.map((log) => ({
+      task: log.activity,
+      start: new Date(log.start_time).toLocaleTimeString(),
+      end: new Date(log.end_time).toLocaleTimeString(),
+      duration: formatDuration(new Date(log.end_time) - new Date(log.start_time)),
+    }));
+    setLogs(formatted);
+  }
+};
   useEffect(() => {
     fetchSession();
+    fetchLogs();
   }
-    , [])
+  , [])
 
 
 
@@ -39,15 +75,16 @@ const Track = () => {
 
   const handleStart = () => {
     if (!activity.trim()) return;
+    setElapsedTime(0);
     setStartTime(new Date());
     setIsRunning(true);
-    startTimeref.current = Date.now() - elapsedTime;
+    startTimeref.current = Date.now();
   };
 
-  const handleStop = () => {
+  const handleStop = async() => {
     if (!startTime) return;
     const endTime = new Date();
-    const duration = ((endTime - startTime) / 1000 / 60).toFixed(2); // in minutes
+    const duration = formatDuration(endTime - startTime);
     const newLog = {
       task: activity,
       start: startTime.toLocaleTimeString(),
@@ -55,6 +92,7 @@ const Track = () => {
       duration,
     };
     setLogs([newLog, ...logs]);
+    await addActivityLogs(activity, startTime.toISOString(), endTime.toISOString());
     setActivity('');
     setStartTime(null);
     setIsRunning(false);
@@ -74,6 +112,14 @@ const Track = () => {
     setIsRunning(false);
     setActivity('');
   }
+  const formatDuration = (ms) => {
+  const totalSeconds = Math.floor(ms / 1000);
+  const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+  const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+  const seconds = String(totalSeconds % 60).padStart(2, '0');
+  return `${hours}:${minutes}:${seconds}`;
+};
+
   const formatTime = () => {
     let hours = Math.floor(elapsedTime / (1000 * 60 * 60));
     let minutes = Math.floor(elapsedTime / (1000 * 60) % 60);

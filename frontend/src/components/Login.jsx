@@ -46,8 +46,7 @@ const Login = ({isOpen,onClose,switchToRegister, onLoginSuccess}) => {
             <button type="submit" className="btn-register">Login</button>
             <p>Don't have an account?</p>
             <a className="a-login" style={{ cursor: "pointer", color: "blue" }} onClick={switchToRegister}>Register now</a>
-          </form>
-          
+          </form>  
         </div>
       </div>
     </>

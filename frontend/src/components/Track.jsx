@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../supabase-client.js'
-import Navbar from './Navbar.jsx';
 const Track = () => {
   const addActivityLogs = async(activity,start_time,end_time) => {
     console.log("Calling addActivityLogs:", { activity, start_time, end_time });

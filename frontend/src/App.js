@@ -1,7 +1,6 @@
 import React from 'react'
 import Navbar from './components/Navbar.jsx'
 import Track from './components/Track.jsx'
-import TrackDummy from './components/TrackDummy.jsx'
 import Register from './components/Register.jsx'
 import Reports from './components/Reports.jsx'
 import Home from './components/Home.jsx'
@@ -12,7 +11,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { supabase } from './supabase-client.js'
 import './App.css'
 import Sidebar from './components/Sidebar.jsx'
-import { SupabaseClient } from '@supabase/supabase-js'
+
 
 
 const App = () => {

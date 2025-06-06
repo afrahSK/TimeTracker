@@ -1,6 +1,5 @@
 import React from 'react'
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import {supabase} from "../supabase-client";
 const Register = ({ isOpen, onClose, switchToLogin }) => {
 

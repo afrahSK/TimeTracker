@@ -351,6 +351,7 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: scroll;
 }
 
 .overlay {
@@ -367,12 +368,14 @@ body{
   background: linear-gradient(to right, #48cae4, #023e8a);
   -webkit-background-clip: text;
   color: transparent;
-  margin-bottom: 0.5rem;
+  /* margin-bottom: 0.5rem; */
+  display: block;
+  margin-top: -2rem;
 }
 
 .subtitle {
   font-size: 1.25rem;
-  margin-bottom: 2rem;
+  margin-top: -1rem;
 }
 
 .stats {
@@ -401,7 +404,7 @@ body{
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1rem;
-  margin: 2rem 0;
+  margin: 1rem 0;
 }
 
 .feature-card {

@@ -10,11 +10,11 @@ const Home = () => {
         <p className="subtitle">Boost productivity with tracking, scheduling, and visualization tools.</p>
 
         {/* Animated Stats */}
-        <div className="stats">
-          <div className="stat-card">🚀 10,000+ Users</div>
+        {/* <div className="stats">
+          <div className="stat-card">10+ Users</div>
           <div className="stat-card">⏱ 1M+ Hours Tracked</div>
           <div className="stat-card">📊 500K+ Tasks Completed</div>
-        </div>
+        </div> */}
 
         {/* Feature Grid */}
         <div className="features">
@@ -26,7 +26,7 @@ const Home = () => {
         </div>
 
         {/* CTA Button */}
-        <button className="home-btn" onClick={() => navigate('/register')}>Get Started for Free</button>
+        {/* <button className="home-btn" onClick={() => navigate('/register')}>Get Started for Free</button> */}
       </div>
     </div>
   )

@@ -8,7 +8,7 @@ export const SidebarData = [
     {
         title: "New Activity",
         icon: <AddTaskIcon/>,
-        link: "/Track"
+        link: "/track"
     },
     {
         title: "My Activities",

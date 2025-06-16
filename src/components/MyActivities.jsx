@@ -5,7 +5,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css';
 
-const MyActivities = () => {
+const Myactivities = () => {
     const [groupedActivities, setGroupedActivities] = useState({});
 
     const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -208,4 +208,4 @@ const MyActivities = () => {
     );
 };
 
-export default MyActivities;
+export default Myactivities;

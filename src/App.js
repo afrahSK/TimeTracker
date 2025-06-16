@@ -5,12 +5,13 @@ import Register from './components/Register.jsx'
 import Reports from './components/Reports.jsx'
 import Home from './components/Home.jsx'
 import Account from './components/Account.jsx'
-import MyActivities from './components/MyActivities.jsx'
+import Myactivities from './components/Myactivities.jsx'
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { supabase } from './supabase-client.js'
 import './App.css'
 import Sidebar from './components/Sidebar.jsx'
+import Pomodoro from './components/Pomodoro.jsx'
 
 
 
@@ -37,15 +38,18 @@ const App = () => {
         {!session ? (
           <Home />
         ) : (
+          <div className='main'>
           <div className='left' style={{ display: 'flex', height:'calc(100vh-3rem)' }}>
             <Sidebar />
-            <div style={{ flex: 1, padding: '20px', minWidth: '100vh' }}>
+          </div>
+            <div style={{ flex: 1, padding: '0', minWidth: '100vh' }} className='right'>
               <Routes>
                 <Route path='/' element={<Track />} />
                 <Route path='/register' element={<Register />} />
                 <Route path='/track' element={<Track />} />
-                <Route path='/MyActivities' element={<MyActivities />} />
-                <Route path='/Account' element={<Account />} />
+                <Route path='/Myactivities' element={<Myactivities />} />
+                <Route path='/pomodoro' element={<Pomodoro />} />
+                <Route path='/account' element={<Account />} />
                 <Route path='/Reports' element={<Reports />} />
               </Routes>
             </div>

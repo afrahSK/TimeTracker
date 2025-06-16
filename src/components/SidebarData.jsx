@@ -13,7 +13,7 @@ export const SidebarData = [
     {
         title: "My Activities",
         icon: <AssignmentIcon/>,
-        link: "/MyActivities"
+        link: "/Myactivities"
     },
     {
         title: "Reports",
@@ -28,7 +28,7 @@ export const SidebarData = [
     {
         title: "My Account",
         icon: <AccountCircleIcon/>,
-        link: "/Account"
+        link: "/account"
     },
 
 ]

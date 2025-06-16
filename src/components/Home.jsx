@@ -1,21 +1,33 @@
 import React from 'react'
-import img from '../assets/desk.jpg'
-import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+
 const Home = () => {
   const navigate = useNavigate();
   return (
     <div className='home'>
-        {/* <img src={img} alt="img" className='home-img'/> */}
-        <div className="bg">
-          <p className='home-txt'>Track time efficiently.</p>
-          <p className='home-para'>Time tracking with report processing and visualization</p>
-          <div className="btns">
-            {/* <button className="home-btn" onClick={()=>navigate('/register')}>
-                Get started for free
-            </button> */}
-          </div>
+      <div className="overlay">
+        <h1 className="title">Track Time Efficiently.</h1>
+        <p className="subtitle">Boost productivity with tracking, scheduling, and visualization tools.</p>
+
+        {/* Animated Stats */}
+        <div className="stats">
+          <div className="stat-card">🚀 10,000+ Users</div>
+          <div className="stat-card">⏱ 1M+ Hours Tracked</div>
+          <div className="stat-card">📊 500K+ Tasks Completed</div>
         </div>
+
+        {/* Feature Grid */}
+        <div className="features">
+          <div className="feature-card">⏰ Time Tracking</div>
+          <div className="feature-card">🍅 Pomodoro Timer</div>
+          <div className="feature-card">📝 To-Do Manager</div>
+          <div className="feature-card">📈 Graph Visualization</div>
+          <div className="feature-card">📅 Task Scheduling</div>
+        </div>
+
+        {/* CTA Button */}
+        <button className="home-btn" onClick={() => navigate('/register')}>Get Started for Free</button>
+      </div>
     </div>
   )
 }

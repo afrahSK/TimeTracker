@@ -111,6 +111,18 @@ const Myactivities = () => {
         fetchActivities();
 
     }, [filter, value])
+
+    const totalWorked = async (month) => {
+        const { data, error } = await supabase.from('activities')
+            .select('start_time, end_time');
+        data.forEach((activity) => {
+            const start = new Date(activity.start_time);
+            const end = new Date(activity.end_time);
+            const duration = end - start;
+
+        })
+    }
+    // 
     return (
         <div className="my-activities">
             <div className='header'>
@@ -177,31 +189,43 @@ const Myactivities = () => {
                 {Object.keys(groupedActivities).length === 0 ? (
                     <p className="no-activities">No activities found.</p>
                 ) : (
-                    Object.entries(groupedActivities).map(([month, activities]) => (
-
-                        <div key={month} className="month-group">
-                            <h3>{month}</h3>
-                            <ul>
-                                {activities.map((act) => {
-                                    const start = new Date(act.start_time);
-                                    const end = new Date(act.end_time);
-                                    const durationMs = end - start;
-                                    const hours = Math.floor(durationMs / (1000 * 60 * 60));
-                                    const minutes = Math.floor((durationMs / (1000 * 60)) % 60);
-                                    const seconds = Math.floor((durationMs / 1000) % 60);
-                                    const formattedDuration = `${hours.toString()} hour
+                    Object.entries(groupedActivities).map(([month, activities]) => {
+                        const total = activities.reduce((acc, act) => {
+                            const start = new Date(act.start_time);
+                            const end = new Date(act.end_time);
+                            return acc + (end - start);
+                        }, 0);
+                        const total_hours = Math.floor(total / (1000 * 60 * 60));
+                        const total_minutes = Math.floor(total / (1000 * 60) % 60);
+                        const total_seconds = Math.floor(total / (1000) % 60);
+                        const formatted_total = `${total_hours.toString()} hour
+                  ${total_minutes.toString()} minutes ${total_seconds.toString().padStart(2, '0')} seconds` 
+                        return(
+                            <div key={month} className="month-group">
+                                <h3>{month} <p className='worked'>Total hours worked: {formatted_total}</p></h3>
+                                <ul>
+                                    {activities.map((act) => {
+                                        const start = new Date(act.start_time);
+                                        const end = new Date(act.end_time);
+                                        const durationMs = end - start;
+                                        const hours = Math.floor(durationMs / (1000 * 60 * 60));
+                                        const minutes = Math.floor((durationMs / (1000 * 60)) % 60);
+                                        const seconds = Math.floor((durationMs / 1000) % 60);
+                                        const formattedDuration = `${hours.toString()} hour
                   ${minutes.toString()} minutes ${seconds.toString().padStart(2, '0')} seconds`
-                                    return (
-                                        <li key={act.id}>
-                                            <strong>{act.activity}</strong><br />
-                                            {start.toLocaleTimeString()} - {end.toLocaleTimeString()} &nbsp;&nbsp;
-                                            <span style={{ color: '#888' }}>{formattedDuration}</span>
-                                        </li>
-                                    )
-                                })}
-                            </ul>
-                        </div>
-                    ))
+                                        return (
+                                            <li key={act.id}>
+                                                <strong>{act.activity}</strong><br />
+                                                {start.toLocaleTimeString()} - {end.toLocaleTimeString()} &nbsp;&nbsp;
+                                                <span style={{ color: '#888' }}>{formattedDuration}</span>
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
+                            </div>
+                        )
+                    }
+                    )
                 )}
             </div>
         </div>

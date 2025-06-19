@@ -111,18 +111,7 @@ const Myactivities = () => {
         fetchActivities();
 
     }, [filter, value])
-
-    const totalWorked = async (month) => {
-        const { data, error } = await supabase.from('activities')
-            .select('start_time, end_time');
-        data.forEach((activity) => {
-            const start = new Date(activity.start_time);
-            const end = new Date(activity.end_time);
-            const duration = end - start;
-
-        })
-    }
-    // 
+ 
     return (
         <div className="my-activities">
             <div className='header'>

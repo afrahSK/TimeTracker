@@ -11,7 +11,13 @@ const Register = ({ isOpen, onClose, switchToLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("working");
-    const {error: signUpError} = await supabase.auth.signUp({email, password});
+    const {error: signUpError} = await supabase.auth.signUp({email, password,
+      options:{
+        data:{
+          name:name
+        }
+      }
+    });
     if(signUpError){
       console.log("Error signing up:", signUpError.message);
       return;

@@ -84,7 +84,11 @@ const Account = () => {
             progress
           </div>
           <div className="matrics">
-            matrics
+            <div className='matrics-grid'>
+              to-do tasks</div>
+            <div className='matrics-grid'>Ongoing tasks</div>
+            <div className='matrics-grid'>task completed</div>
+            <div className='matrics-grid'>hours worked</div>
           </div>
       </div>
     </div>

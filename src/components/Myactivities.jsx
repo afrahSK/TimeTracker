@@ -115,8 +115,10 @@ const Myactivities = () => {
     return (
         <div className="my-activities">
             <div className='header'>
-                <h2>My Activities</h2>
-                {filter !== '' && (
+                <div className="header-left">
+                    <h2>My Activities</h2>
+               
+                    {filter !== '' && (
                     <p className='filter-p'>
                         {(() => {
                             switch (filter) {
@@ -129,7 +131,8 @@ const Myactivities = () => {
                         })()}
                     </p>
                 )}
-
+                </div>
+                 <div className="header-right">
                 {filter !== '' && (
                     <button className='clrFilter' onClick={() => { setFilter(''); setIsFilterOpen(false); setValue(new Date()) }}>Clear Filter</button>)}
                 <div className="filter">
@@ -171,6 +174,7 @@ const Myactivities = () => {
                             </div>
                         </>
                     )}
+                </div>
                 </div>
 
             </div>

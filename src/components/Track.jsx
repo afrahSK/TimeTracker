@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../supabase-client.js';
 
+
 const Track = () => {
   const [session, setSession] = useState(null);
   const [activity, setActivity] = useState('');
@@ -12,6 +13,12 @@ const Track = () => {
   const startTimeref = useRef(0);
   const pauseTimeref = useRef(0);
 
+
+  // for projects
+
+  const [projects, setProjects] = useState([]);
+  const [selectedProject, setSelectedProject] = useState(null);
+
   // Fetch user session
   const fetchSession = async () => {
     const currentSession = await supabase.auth.getSession();
@@ -22,7 +29,7 @@ const Track = () => {
   const fetchLogs = async () => {
     const { data, error } = await supabase
       .from('activities')
-      .select('*')
+      .select('id, activity, start_time, end_time, project_id, projects(name)')
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -32,7 +39,8 @@ const Track = () => {
         task: log.activity,
         start: new Date(log.start_time).toLocaleTimeString(),
         end: new Date(log.end_time).toLocaleTimeString(),
-        duration: formatDuration(new Date(log.end_time) - new Date(log.start_time))
+        duration: formatDuration(new Date(log.end_time) - new Date(log.start_time)),
+        projectName: log.projects?.name || 'No Project'
       }));
       setLogs(formatted);
     }
@@ -42,8 +50,7 @@ const Track = () => {
   const addActivityLogs = async (activity, start_time, end_time) => {
     const { data, error } = await supabase
       .from('activities')
-      .insert([{ activity, start_time, end_time }]);
-
+      .insert([{ activity, start_time, end_time, project_id: selectedProject || null }]);
     if (error) {
       console.error("Insert error:", error.message);
     } else {
@@ -51,10 +58,26 @@ const Track = () => {
     }
   };
 
+
   useEffect(() => {
     fetchSession();
     fetchLogs();
   }, []);
+
+  useEffect(() => {
+    if (session) fetchProjects();
+  }, [session]);
+
+  const fetchProjects = async () => {
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('user_id', session.user.id);
+    if (error) console.error(error.message);
+    else setProjects(data);
+  };
+
+
 
   useEffect(() => {
     if (isRunning) {
@@ -103,6 +126,7 @@ const Track = () => {
     };
     setLogs([newLog, ...logs]);
     await addActivityLogs(activity, startTime.toISOString(), endTime.toISOString());
+    await fetchLogs();
     handleReset();
   };
 
@@ -129,7 +153,18 @@ const Track = () => {
       ) : (
         <div className="track-container">
           <div className='title'>Start an Activity</div>
-
+          <select
+            value={selectedProject || ''}
+            onChange={(e) => setSelectedProject(e.target.value)}
+            className="project-select"
+          >
+            <option value="">No project</option>
+            {projects.map((proj) => (
+              <option key={proj.id} value={proj.id}>
+                {proj.name}
+              </option>
+            ))}
+          </select>
           <div className="track-inputs">
             <input
               type="text"
@@ -168,7 +203,7 @@ const Track = () => {
               <ul>
                 {logs.map((log, index) => (
                   <li key={index}>
-                    <strong>{log.task}</strong><br />
+                    <strong>{log.task}</strong> {log.projectName && <>— <em>{log.projectName}</em></>}<br />
                     {log.start} - {log.end} ({log.duration})
                   </li>
                 ))}

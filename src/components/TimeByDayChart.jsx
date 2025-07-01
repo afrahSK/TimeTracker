@@ -1,5 +1,6 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
+
 import {
   Chart as ChartJS,
   BarElement,
@@ -16,15 +17,10 @@ ChartJS.register(
   LinearScale,
   Tooltip,
   Title,
-  Legend
+  Legend,
 );
 
-// Helper: Convert decimal hours to HH:MM
-const formatHoursToHHMM = (hours) => {
-  const h = Math.floor(hours);
-  const m = Math.round((hours - h) * 60);
-  return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
-};
+
 
 const TimeByDayChart = ({ data }) => {
   const labels = Object.keys(data);
@@ -36,55 +32,62 @@ const TimeByDayChart = ({ data }) => {
       {
         label: 'Time Spent',
         data: values,
-        backgroundColor: '#00E5FF', 
+        backgroundColor: '#00E5FF',
         borderRadius: 6,
         borderSkipped: false,
         barThickness: 32,
-      }
-    ]
+      },
+    ],
   };
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        callbacks: {
-          label: (context) => {
-            const value = context.raw;
-            return `Time: ${formatHoursToHHMM(value)}`;
-          }
-        }
-      }
+
+  const formatToHHMM = (seconds) => {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+};
+
+const options = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: false,
     },
-    scales: {
-      y: {
-        beginAtZero: true,
-        ticks: {
-          callback: (value) => formatHoursToHHMM(value),
-          color: '#AAB2C4',
-          stepSize: 0.25 // ~15 mins
+    tooltip: {
+      callbacks: {
+        label: function (context) {
+          const seconds = context.raw;
+          const minutes = Math.floor((seconds % 3600) / 60);
+          const s = Math.floor(seconds % 60);
+          return `${context.dataset.label || ''}: ${minutes > 0 ? `${minutes} min ` : ''}${s} secs`;
         },
-        title: {
-          display: true,
-          text: '(HH:MM)',
-          color: '#AAB2C4',
-          padding: { top: 10 }
-        },
-        grid: {
-          color: '#EDEDED',
-          drawBorder: false
-        }
       },
-      x: {
-        ticks: { color: '#AAB2C4' },
-        grid: {
-          display: false
-        }
-      }
-    }
-  };
-  console.log(data);
+    },
+  },
+  scales: {
+    y: {
+      beginAtZero: true,
+      ticks: {
+        callback: function (value) {
+          return formatToHHMM(value);
+        },
+        stepSize: 900, // 900 seconds = 15 minutes
+      },
+      title: {
+        display: true,
+        text: '(HH:MM)',
+      },
+    },
+    x: {
+      grid: {
+        display: false,
+      },
+    },
+  },
+};
+
+
   return <Bar data={chartData} options={options} />;
 };
 

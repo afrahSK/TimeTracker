@@ -5,6 +5,32 @@ import Calendar from 'react-calendar'
 import SendAndArchiveIcon from '@mui/icons-material/SendAndArchive';
 import { supabase } from '../supabase-client';
 import TimeByDayChart from './TimeByDayChart';
+import TimeByProjectChart from './TimeByProjectChart';
+const ProjectBreakdown = ({ data }) => {
+  return (
+    <div className="project-breakdown-table">
+      <ul>
+        <div className="bd-headings">
+          <li>Project</li>
+          <li>Duration</li>
+          <li>Duration %</li>
+        </div>
+        {Object.entries(data).map(([project, hours]) => (
+          <li key={project} className="breakdown-row">
+            <span className="project-name">{project}</span>
+            <span className="project-hours">{hours.toFixed(2)} hrs</span>
+          </li>
+        ))}
+        <div className="bd-total">
+          <li>Total</li>
+          <li>00:16:40</li>
+          <li></li>
+        </div>
+      </ul>
+    </div>
+  );
+};
+
 const Reports = () => {
   const [projectFilterOpen, setProjectFilterOpen] = useState(false);
   const [memberFilterOpen, setMemberFilterOpen] = useState(false);
@@ -12,7 +38,7 @@ const Reports = () => {
   const [isCalendarFilterOpen, setCalendarFilterOpen] = useState(false);
   const [filter, setFilter] = useState('');
   const [value, setValue] = useState('');
-  const[isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const toggleShareModal = () => {
     setIsShareModalOpen(!isShareModalOpen);
     console.log(isShareModalOpen);
@@ -31,40 +57,100 @@ const Reports = () => {
   const handleFilter = () => {
 
   }
-  useEffect(()=> {
+  useEffect(() => {
     handleFilter();
   }, []);
 
 
+  // for the bar graph of time spent by day
   // fetching the activity data
+  // this state has dates as key, and time spent as values
   const [dailyTimeData, setDailyTimeData] = useState({});
-  useEffect(()=>{
-    const fetchTimeByDay = async() => {
-      const {data, error} = await supabase.from('activities')
-      .select('*').order('start_time',{ascending:true});
-      if(error){
+
+  useEffect(() => {
+    const fetchTimeByDay = async () => {
+      // fetching all the data in ascending order
+      const { data, error } = await supabase
+        .from('activities')
+        .select('*')
+        .order('start_time', { ascending: true });
+
+      if (error) {
         console.log(error.message);
         return;
       }
-      const totalByDays = {};
-      data.forEach((activity)=>{
-        const start = new Date(activity.start_time);
-        const end = new Date(activity.end_time);
-        const durationHours = (end - start) / (1000 * 60 * 60);
-        const dateKey = start.toLocaleDateString('en-GB', {
+
+      const now = new Date();//current date
+      const days = [];//will store the last 7 days in the format - 30th june,2025
+      const totalByDays = {};//object that maps each day to total hours
+
+      // Build last 7 days (today and 6 days before)
+      // /this look will create 7 days keys
+      // Each key will look like - 30th june, 2025
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date(now);//todays date
+        date.setDate(now.getDate() - i);
+        const key = date.toLocaleDateString('en-GB', {
           day: '2-digit',
           month: 'short',
-          year: 'numeric'
+          year: 'numeric',
         });
-        if(!totalByDays[dateKey]){
-          totalByDays[dateKey] = 0;
+        days.push(key);
+        totalByDays[key] = 0; // default to 0 to every day
+      }
+
+      // take out the duration of each activity fetched
+      data.forEach((activity) => {
+        const start = new Date(activity.start_time);
+        const end = new Date(activity.end_time);
+        const durationSeconds = (end - start) / 1000; // in seconds
+        const key = start.toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+        });
+
+        if (totalByDays[key] !== undefined) {
+          totalByDays[key] += durationSeconds;
         }
-        totalByDays[dateKey] += durationHours;
       });
+
       setDailyTimeData(totalByDays);
-    }
+    };
+
     fetchTimeByDay();
-  }, [])
+  }, []);
+
+
+  // fetch time by project 
+  const [projectTimeData, setProjectTimeData] = useState({});
+  useEffect(() => {
+    const fetchTimeByProject = async () => {
+      const { data, error } = await supabase
+        .from('activities')
+        .select('start_time, end_time, projects(name)');
+
+      if (error) {
+        console.log(error.message);
+        return;
+      }
+
+      const projectDurations = {};
+
+      data.forEach((activity) => {
+        const start = new Date(activity.start_time);
+        const end = new Date(activity.end_time);
+        const durationHours = (end - start) / 3600000; // in hours
+
+        const projectName = activity.projects?.name || 'Without Project';
+        projectDurations[projectName] = (projectDurations[projectName] || 0) + durationHours;
+      });
+
+      setProjectTimeData(projectDurations);
+    };
+
+    fetchTimeByProject();
+  }, []);
 
   return (
     <div className="reports-container">
@@ -77,7 +163,7 @@ const Reports = () => {
         <div className="reports-actions">
           <button className='btn'>Export as CSV</button>
           <button className='btn'>Export as PDF</button>
-          <button className='share' onClick={toggleShareModal}><SendAndArchiveIcon/>Save and Share</button>
+          <button className='share' onClick={toggleShareModal}><SendAndArchiveIcon />Save and Share</button>
         </div>
       </div>
 
@@ -183,14 +269,6 @@ const Reports = () => {
           <p className="value">0:00:49</p>
         </div>
         <div className="card">
-          <p className="label">Billable Hours</p>
-          <p className="value">0:00:05 <span className="percentage">(10.2%)</span></p>
-        </div>
-        <div className="card">
-          <p className="label">Revenue</p>
-          <p className="value">-</p>
-        </div>
-        <div className="card">
           <p className="label">Average Daily Hours</p>
           <p className="value">0.01 Hours</p>
         </div>
@@ -207,19 +285,24 @@ const Reports = () => {
                     {/* bar chart */}
                     {/* x-date, y-hours worked */}
                     {/* helps identify productivity patterns */}
-                    <TimeByDayChart data={dailyTimeData}/>
+                    <TimeByDayChart data={dailyTimeData} />
                   </div>
                   <div className="summary-by-project common">
                     Time spent by project
                     {/* total time spent across all projects */}
+                    <TimeByProjectChart data={projectTimeData}/>
                   </div>
                 </div>
                 <div className="summary-breakdown common">
-                  project and member breakown
+                  <p>Project and member breakdown</p>
                   {/* contribution per team member across projects*/}
                   {/* useful for team insights and billing  */}
+                  <ProjectBreakdown data={projectTimeData}/>
                 </div>
-                {/* heatmap view like github */}
+                <div className="heatmap common">
+                  {/* heatmap view like github */}
+                  heatmap summary of total hours worked on particular day /
+                </div>
               </span>
             </>
           ) : (
@@ -228,17 +311,20 @@ const Reports = () => {
                 <div className="common det">
                   <div className="det-header">
                     All activity entries this week
-                  <button className="addEntry">
-                    + Add Entry
-                  </button>
+                    
+                    <button className="addEntry">
+                      + Add Entry
+                    </button>
+                  </div>
+                  <div className="repo">
+                    fejfhh feuhfuhf
                   </div>
                 </div>
-                  
+
               </span>
             </>
           )
         }
-
       </div>
       {isShareModalOpen && (
         <>
@@ -246,7 +332,7 @@ const Reports = () => {
             <div className="modal-content share-modal">
               <div className="modal-header">
                 <p>Save</p>
-               <button className="share-close" onClick={toggleShareModal}>✖</button>
+                <button className="share-close" onClick={toggleShareModal}>✖</button>
               </div>
               <div className="share-form">
                 <label htmlFor="Report name">Report Name</label>

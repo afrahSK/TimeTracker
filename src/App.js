@@ -12,6 +12,7 @@ import { supabase } from './supabase-client.js'
 import './App.css'
 import Sidebar from './components/Sidebar.jsx'
 import Pomodoro from './components/Pomodoro.jsx'
+import Projects from './components/Projects.jsx'
 
 
 
@@ -39,15 +40,16 @@ const App = () => {
           <Home />
         ) : (
           <div className='main'>
-          <div className='left' style={{ display: 'flex', height:'calc(100vh-3rem)' }}>
-            <Sidebar />
-          </div>
-            <div style={{ flex: 1, padding: '0', minWidth: '100vh' }} className='right'>
+            <div className='left'>
+              <Sidebar />
+            </div>
+            <div className='right'>
               <Routes>
                 <Route path='/' element={<Track />} />
                 <Route path='/register' element={<Register />} />
                 <Route path='/track' element={<Track />} />
                 <Route path='/Myactivities' element={<Myactivities />} />
+                <Route path='/projects' element={<Projects />} />
                 <Route path='/pomodoro' element={<Pomodoro />} />
                 <Route path='/account' element={<Account />} />
                 <Route path='/Reports' element={<Reports />} />

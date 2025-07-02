@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect } from 'react';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Calendar from 'react-calendar'
@@ -8,7 +8,8 @@ import TimeByDayChart from './TimeByDayChart';
 import TimeByProjectChart from './TimeByProjectChart';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
-import ExportPdf from './ExportPdf';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import '../heatmap.css'
 const ProjectBreakdown = ({ data }) => {
   return (
@@ -410,8 +411,34 @@ const Reports = () => {
 };
 
 
-  // for export as pdf
-  const reportRef = useRef(null);
+// export as pdf
+const downloadPDF = () => {
+  const doc = new jsPDF();
+
+  doc.setFontSize(14);
+  doc.text('Detailed Activity Report', 14, 20);
+
+  doc.setFontSize(10);
+  doc.text(`Date Range: ${getDateRangeLabel()}`, 14, 28);
+
+  autoTable(doc, {
+    startY: 32,
+    head: [['Date', 'Time', 'Activity', 'Project', 'Duration']],
+    body: activityEntries.map(entry => [
+      entry.date,
+      entry.time,
+      entry.activity,
+      entry.project,
+      entry.duration,
+    ]),
+    styles: { fontSize: 9 },
+  });
+
+  doc.save(`Report_${getDateRangeLabel().replace(/\s/g, '_')}.pdf`);
+};
+
+
+
 
   return (
     <div className="reports-container">
@@ -424,7 +451,7 @@ const Reports = () => {
           </div>
           <div className="reports-actions">
             <button className='btn'  onClick={downloadCSV}>Export as CSV</button>
-            <ExportPdf elementRef={reportRef} getDateRangeLabel={getFilterLabel} />
+            <button className='btn' onClick={downloadPDF}>Export as PDF</button>
             <button className='share' onClick={toggleShareModal}><SendAndArchiveIcon />Save and Share</button>
           </div>
         </div>
@@ -552,7 +579,7 @@ const Reports = () => {
             <p className="value">{avgDailyHours.toFixed(2)} hrs</p>
           </div>
         </div>
-        <div className="reports-tab" ref={reportRef}>
+        <div className="reports-tab">
           {/* summary tab */}
           {
             tab === 'summary' ? (

@@ -1,5 +1,7 @@
+// Pomodoro.js
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../supabase-client.js';
+import ParkIcon from '@mui/icons-material/Park';
 
 const MODES = {
   pomodoro: 25 * 60,
@@ -17,9 +19,10 @@ const Pomodoro = () => {
   const timerRef = useRef(null);
 
   const formatTime = (s) => {
-    const m = String(Math.floor(s / 60)).padStart(2, '0');
+    const h = String(Math.floor(s / 3600)).padStart(2, '0');
+    const m = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
     const sec = String(s % 60).padStart(2, '0');
-    return `${m}:${sec}`;
+    return `${h}:${m}:${sec}`;
   };
 
   const addActivityLogs = async (activity, start_time, end_time) => {
@@ -48,6 +51,12 @@ const Pomodoro = () => {
     alert("Pomodoro session complete!");
   };
 
+  const handleStart = () => {
+    if (!taskName.trim()) return alert("Enter a task name.");
+    setStartTime(new Date());
+    setIsRunning(true);
+  };
+
   const switchMode = (selectedMode) => {
     setMode(selectedMode);
     setTimeLeft(MODES[selectedMode]);
@@ -56,39 +65,17 @@ const Pomodoro = () => {
     setStartTime(null);
   };
 
-  const handleStart = () => {
-    if (!taskName.trim()) return alert("Enter a task name.");
-    setStartTime(new Date());
-    setIsRunning(true);
-  };
-
-  const handlePause = () => setIsRunning(false);
-
-  const handleReset = () => {
-    setIsRunning(false);
-    setTimeLeft(MODES[mode]);
-    setStartTime(null);
-  };
-
-  const handleStop = async () => {
-    setIsRunning(false);
-    const endTime = new Date();
-    if (startTime) {
-      await addActivityLogs(`${taskName || 'Pomodoro Task'} - ${mode}`, startTime.toISOString(), endTime.toISOString());
-    }
-    handleReset();
-  };
-
   return (
-    <div>
-      <h2 className="fade-in pomo-header">Stay focused using Pomodoro. </h2>
-      <div className="pomodoro-container">
-
-      <div className="mode-selector fade-in">
-        {['pomodoro', 'short', 'long10', 'long15'].map((m) => (
+    <div className="pomodoro-wrapper">
+      <span className="title-flex">
+        <ParkIcon className="tree-icon" sx={{ fontSize: 50 }} />
+        Focus Time
+      </span>
+      <div className="modes">
+        {Object.keys(MODES).map((m) => (
           <button
             key={m}
-            className={mode === m ? 'active' : ''}
+            className={`mode-btn ${mode === m ? 'active' : ''}`}
             onClick={() => switchMode(m)}
           >
             {m === 'pomodoro' ? 'Pomodoro' : `Break (${MODES[m] / 60}m)`}
@@ -97,28 +84,34 @@ const Pomodoro = () => {
       </div>
 
       <input
-        className="task-input fade-in"
-        placeholder="What task are you working on?"
+        className="task-input"
+        placeholder="🌼 What are you working on?"
         value={taskName}
         onChange={(e) => setTaskName(e.target.value)}
       />
 
-      <div className="timer-circle fade-in">
-        <div className="circle">
+      <div className="circle-timer">
+        <div className="circle-timer-inner">
           <span>{formatTime(timeLeft)}</span>
+        </div>
+        <div className="pomo-controls">
+          {!isRunning ? (
+            <button onClick={handleStart} className='controls-start'>Start</button>
+          ) : (
+            <button onClick={() => setIsRunning(false)}>Pause</button>
+          )}
+          <div className="controls-reset">
+            <button onClick={() => {
+              setIsRunning(false);
+              setTimeLeft(MODES[mode]);
+              setStartTime(null);
+            }}>Reset</button>
+            <button onClick={handleComplete}>Stop & Save</button>
+          </div>
         </div>
       </div>
 
-      <div className="timer-controls fade-in">
-        {!isRunning ? (
-          <button onClick={handleStart}>Start</button>
-        ) : (
-          <button onClick={handlePause}>Pause</button>
-        )}
-        <button onClick={handleReset}>Reset</button>
-        <button onClick={handleStop}>Stop & Log</button>
-      </div>
-    </div>
+
     </div>
   );
 };

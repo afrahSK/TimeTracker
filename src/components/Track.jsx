@@ -1,23 +1,53 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { supabase } from '../supabase-client.js';
-
-
+import { TimerContext } from '../context/TimerContext.js';
 const Track = () => {
   const [session, setSession] = useState(null);
-  const [activity, setActivity] = useState('');
-  const [startTime, setStartTime] = useState(null);
   const [logs, setLogs] = useState([]);
-  const [isRunning, setIsRunning] = useState(false);
-  const [elapsedTime, setElapsedTime] = useState(0);
-  const intervalIdRef = useRef(null);
-  const startTimeref = useRef(0);
-  const pauseTimeref = useRef(0);
-
-
-  // for projects
-
   const [projects, setProjects] = useState([]);
-  const [selectedProject, setSelectedProject] = useState(null);
+
+  const {
+    activity,
+    setActivity,
+    selectedProject,
+    setSelectedProject,
+    isRunning,
+    startTime,
+    elapsedTime,
+    startTimer,
+    pauseTimer,
+    resumeTimer,
+    resetTimer,
+  } = useContext(TimerContext);
+
+
+  // for supabase realtime sync
+  useEffect(() => {
+    if (!session) return;
+
+    const channel = supabase
+      .channel('realtime:activities')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'activities',
+          filter: `user_id=eq.${session.user.id}`,
+        },
+        (payload) => {
+          console.log('Realtime payload:', payload);
+          fetchLogs();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [session]);
+
+
 
   // Fetch user session
   const fetchSession = async () => {
@@ -50,7 +80,7 @@ const Track = () => {
   const addActivityLogs = async (activity, start_time, end_time) => {
     const { data, error } = await supabase
       .from('activities')
-      .insert([{ activity, start_time, end_time, project_id: selectedProject || null }]);
+      .insert([{ activity, start_time, end_time, project_id: selectedProject || null, user_id: session.user.id }]);
     if (error) {
       console.error("Insert error:", error.message);
     } else {
@@ -78,42 +108,6 @@ const Track = () => {
   };
 
 
-
-  useEffect(() => {
-    if (isRunning) {
-      intervalIdRef.current = setInterval(() => {
-        setElapsedTime(Date.now() - startTimeref.current);
-      }, 10);
-    }
-    return () => clearInterval(intervalIdRef.current);
-  }, [isRunning]);
-
-  // Stopwatch controls
-  const handleStart = () => {
-    if (!activity.trim()) return;
-    setElapsedTime(0);
-    setStartTime(new Date());
-    startTimeref.current = Date.now();
-    setIsRunning(true);
-  };
-
-  const handlePause = () => {
-    setIsRunning(false);
-    pauseTimeref.current = elapsedTime;
-  };
-
-  const handleResume = () => {
-    setIsRunning(true);
-    startTimeref.current = Date.now() - pauseTimeref.current;
-  };
-
-  const handleReset = () => {
-    setElapsedTime(0);
-    setIsRunning(false);
-    setStartTime(null);
-    setActivity('');
-  };
-
   const handleStop = async () => {
     if (!startTime) return;
     const endTime = new Date();
@@ -127,7 +121,7 @@ const Track = () => {
     setLogs([newLog, ...logs]);
     await addActivityLogs(activity, startTime.toISOString(), endTime.toISOString());
     await fetchLogs();
-    handleReset();
+    resetTimer();
   };
 
   const formatDuration = (ms) => {
@@ -174,7 +168,7 @@ const Track = () => {
               onChange={(e) => setActivity(e.target.value)}
             />
             {!startTime && (
-              <button className="btn-start" onClick={handleStart}>
+              <button className="btn-start" onClick={startTimer}>
                 Start
               </button>
             )}
@@ -186,11 +180,11 @@ const Track = () => {
               <div className="controls">
                 <button className="btn-stop" onClick={handleStop}>Stop</button>
                 {isRunning ? (
-                  <button className="btn-stop" onClick={handlePause}>Pause</button>
+                  <button className="btn-stop" onClick={pauseTimer}>Pause</button>
                 ) : (
-                  <button className="btn-stop" onClick={handleResume}>Resume</button>
+                  <button className="btn-stop" onClick={resumeTimer}>Resume</button>
                 )}
-                <button className="btn-stop" onClick={handleReset}>Reset</button>
+                <button className="btn-stop" onClick={resetTimer}>Reset</button>
               </div>
             </div>
           )}

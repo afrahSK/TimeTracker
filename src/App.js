@@ -13,6 +13,8 @@ import './App.css'
 import Sidebar from './components/Sidebar.jsx'
 import Pomodoro from './components/Pomodoro.jsx'
 import Projects from './components/Projects.jsx'
+import { TimerContext } from './context/TimerContext.js'
+import TimerContextProvider from './context/TimerContextProvider.jsx'
 
 
 
@@ -33,7 +35,8 @@ const App = () => {
     };
   }, [])
   return (
-    <div>
+    <TimerContextProvider>
+      <div>
       <BrowserRouter>
         <Navbar session={session} />
         {!session ? (
@@ -60,6 +63,7 @@ const App = () => {
 
       </BrowserRouter>
     </div>
+    </TimerContextProvider>
   )
 }
 

@@ -1,10 +1,19 @@
+:root{
+    --dark-indigo:#201E43;
+    --indigo:#134B70;
+    --lighter:#266d9c;
+    --light-indigo:#508C9B;
+    --cream:#EEEEEE;
+    --light-blue:#edf8ff;
+}
 *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
 html,body{
-  font-family:Arial, Helvetica, sans-serif;
+  font-family:roboto;
   height: 100%;
   overflow: hidden;
 }
@@ -12,18 +21,18 @@ html,body{
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: #0f6eb3;
-  height: 12vh;
-  padding: 2.2rem 4rem;
+  background-color: var(--light-indigo);
+  height: 1vh;
+  padding: 2rem 4rem;
 }
 .logo{
   flex: 1;
-  color: #00d5ff;
+  color: var(--light-blue);
   margin: 1rem;
   font-size: 1.85rem;
 }
 .logo span{
-  color: #caf0f8;
+  color: var(--light-blue);
   font-size: 1.85rem;
 }
 .nav-items{
@@ -50,13 +59,13 @@ html,body{
   flex: 1;
 }
 .btn-auth{
-  padding: 0.75rem;
-  border-radius: 8px;
+  padding: 0.55rem 1rem;
+  border-radius: 6px;
   text-transform: uppercase;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   border: none;
   font-size: 0.95rem;
-  background-color: #89c2d9;
+  background-color: white;
   color: #013a63;
 }
 .btn-auth:hover{
@@ -184,7 +193,7 @@ html,body{
 /* sidebar */
 .sidebar{
   height: 100%;
-  background-color: #468faf;
+  background-color: var(--dark-indigo);
   width: 17vw;
 }
 .sidebarList{
@@ -207,12 +216,12 @@ html,body{
 
 }
 .sidebarRow:hover{
-  background-color: #293846;
+  background-color: var(--lighter);
   cursor: pointer;
   overflow: hidden;
 }
 .sidebarList #active{
-  background-color: #293846;
+  background-color: var(--lighter);
 }
 .sidebarRow #icon{
   flex: 30%;
@@ -289,7 +298,15 @@ html,body{
 .btn-stop:hover {
   background-color: #013a63;
 }
-
+.project-select{
+  margin-bottom: 1rem;
+  padding: 0.5rem 0.1rem;
+  background-color: #ffffff;
+  border-radius: 7px;
+  border: 2px solid var(--indigo);
+  box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.212);
+  display: flex;
+}
 .track-logs {
   background-color: #ffffff;
   padding: 20px;
@@ -756,12 +773,20 @@ html,body{
 }
 
 /* my account */
-.personal-details{
-    background-color: #b8e2f3;
+.about-container{
+  display: flex;
+  background-color: #edf8ff;
+}
+.about-divs{
+  background-color: #ffffff;
+  border: 1px solid #d6e6f2;
+  border-radius: 5px;
+  box-shadow: 0 0 10px 2px rgba(0, 76, 130, 0.128);
+}
+.about-left{
     height:83vh;
     width: 26vw;
     margin: 1rem;
-    border-radius: 10px;
 }
 .profile{
   background-color: #81bbce;
@@ -771,8 +796,8 @@ html,body{
   /* justify-content: center; */
   align-items: center;
   gap: 2rem;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 .profile-pic{
   background-color: white;
@@ -840,38 +865,41 @@ html,body{
   flex-direction: row;
   gap: 1rem;
 }
-.main-about{
-  display: flex;
-}
 .about-right{
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  /* justify-content: center; */
   margin: 1rem 0;
+}
+.folder-icon{
+  color: yellow;
 }
 .progress{
   height: 50vh;
-  background-color: #b8e2f3;
   width: 53vw;
-  border-radius: 10px;
 }
 .matrics{
   height: 40vh;
-  background-color: #b8e2f3;
   width: 53vw;
-  border-radius: 10px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 }
 .matrics-grid{
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
   margin: 0.6rem;
-  background-color: white;
-  border-radius: 10px;
+  background-color: rgb(101, 170, 239);
   height: 5rem;
+  border-radius: 10px;
+  color: white;
+  padding: 1rem;
 }
-
+.mat-right{
+  display: flex;
+  flex-direction: column;
+}
 
 /* reports */
 .reports-container {
@@ -910,6 +938,7 @@ html,body{
   border: none;
   margin-left: 10px;
   font-size: 18px;
+  background-color: white;
   cursor: pointer;  
   border: 2px solid #bfdbf3;
   border-radius: 7px;
@@ -947,8 +976,9 @@ html,body{
 
 .date-range {
   font-weight: 500;
-  background-color: #eaf2fb;
+  background-color: #ffffff;
   padding: 8px 12px;
+  border: 1px solid rgba(67, 159, 245, 0.596);
   border-radius: 8px;
   color: #2980b9;
   display: flex;
@@ -1094,7 +1124,7 @@ html,body{
 .filterCalendarModal{
   position: absolute;
   height: 23rem;
-  box-shadow: 0 0 15px #b8b8b8;
+  box-shadow: 0 0 15px #b8b8b8a2;
   background-color: white;
   margin-top: 0.35rem;
   border-radius: 6px;

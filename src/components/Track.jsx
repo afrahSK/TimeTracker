@@ -197,7 +197,7 @@ const Track = () => {
               <ul>
                 {logs.map((log, index) => (
                   <li key={index}>
-                    <strong>{log.task}</strong> {log.projectName && <>— <em>{log.projectName}</em></>}<br />
+                    <strong>{log.task}</strong> {log.projectName && <>- <em>{log.projectName}</em></>}<br />
                     {log.start} - {log.end} ({log.duration})
                   </li>
                 ))}

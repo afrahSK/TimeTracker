@@ -33,7 +33,7 @@ const Navbar = ({session}) => {
     <>
       <div className='nav'>
         <div className='logo'>
-          Time<span>Tracker</span>
+          <span>Tracklify</span>
         </div>
         <div className="nav-items">
         </div>

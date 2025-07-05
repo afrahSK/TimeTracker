@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Calendar from 'react-calendar'
@@ -166,12 +166,6 @@ const Reports = () => {
   useEffect(() => {
     handleFilter();
   }, []);
-
-  // useeffect to fetch all activity data to show in detailed summary page
-
-
-
-
 
   // for the bar graph of time spent by day
   // fetching the activity data
@@ -438,7 +432,7 @@ const downloadPDF = () => {
 };
 
 
-
+// to close modals when clicking elsewhere
 
   return (
     <div className="reports-container">
@@ -597,7 +591,7 @@ const downloadPDF = () => {
                     </div>
                   </div>
                   <div className="summary-breakdown common">
-                    <p>Project and member breakdown</p>
+                    <p>Project breakdown</p>
                     {/* contribution per team member across projects*/}
                     {/* useful for team insights and billing  */}
                     <ProjectBreakdown data={projectTimeData} />

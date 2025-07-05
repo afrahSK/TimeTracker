@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { supabase } from '../supabase-client.js';
 import TuneIcon from '@mui/icons-material/Tune';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -9,6 +9,7 @@ const Myactivities = () => {
     const [groupedActivities, setGroupedActivities] = useState({});
 
     const [isFilterOpen, setIsFilterOpen] = useState(false);
+   
     const toggle = () => {
         setIsFilterOpen(!isFilterOpen);
     }
@@ -111,70 +112,91 @@ const Myactivities = () => {
         fetchActivities();
 
     }, [filter, value])
- 
+
+
+    // useref to close filter modal when clicking on screen
+    const filterRef = useRef(null);
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (filterRef.current && !filterRef.current.contains(event.target)) {
+                setIsFilterOpen(false);
+            }
+        };
+
+        if (isFilterOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isFilterOpen]);
+
     return (
         <div className="my-activities">
             <div className='header'>
                 <div className="header-left">
                     <h2>My Activities</h2>
-               
-                    {filter !== '' && (
-                    <p className='filter-p'>
-                        {(() => {
-                            switch (filter) {
-                                case 'week': return 'Current Week';
-                                case '7days': return 'Last 7 Days';
-                                case 'month': return 'Current Month';
-                                case '3months': return 'Last 3 Months';
-                                default: return '';
-                            }
-                        })()}
-                    </p>
-                )}
-                </div>
-                 <div className="header-right">
-                {filter !== '' && (
-                    <button className='clrFilter' onClick={() => { setFilter(''); setIsFilterOpen(false); setValue(new Date()) }}>Clear Filter</button>)}
-                <div className="filter">
 
-                    <button className='filter-btn' onClick={toggle}>
-                        <TuneIcon />Filter<KeyboardArrowDownIcon /></button>
-                    {isFilterOpen && (
-                        <>
-                            <div className='filterModal'>
-                                <div className="filter-content">
-                                    <div className="filter-left">
-                                        <ul>
-                                            <li onClick={() => {
-                                                setFilter('week')
-                                                setIsFilterOpen(false);
-                                            }}>Current week</li>
-                                            <li onClick={() => {
-                                                setFilter('7days')
-                                                setIsFilterOpen(false)
-                                            }}>Last 7 days</li>
-                                            <li onClick={() => {
-                                                setFilter('month')
-                                                setIsFilterOpen(false)
-                                            }}>Current month</li>
-                                            <li onClick={() => {
-                                                setFilter('3month');
-                                                setIsFilterOpen(false);
-                                            }}>Last 3 months</li>
-                                        </ul>
-                                    </div>
-                                    <div className="filter-right">
-                                        <Calendar onChange={(date) => {
-                                            setValue(date)
-                                            setFilter('calendar')
-                                            setIsFilterOpen(false);
-                                        }} value={value} />
-                                    </div>
-                                </div>
-                            </div>
-                        </>
+                    {filter !== '' && (
+                        <p className='filter-p'>
+                            {(() => {
+                                switch (filter) {
+                                    case 'week': return 'Current Week';
+                                    case '7days': return 'Last 7 Days';
+                                    case 'month': return 'Current Month';
+                                    case '3months': return 'Last 3 Months';
+                                    default: return '';
+                                }
+                            })()}
+                        </p>
                     )}
                 </div>
+                <div className="header-right">
+                    {filter !== '' && (
+                        <button className='clrFilter' onClick={() => { setFilter(''); setIsFilterOpen(false); setValue(new Date()) }}>Clear Filter</button>)}
+                    <div className="filter">
+
+                        <button className='filter-btn' onClick={toggle}>
+                            <TuneIcon />Filter<KeyboardArrowDownIcon /></button>
+                        {isFilterOpen && (
+                            <>
+                                <div className='filterModal' ref={filterRef}>
+                                    <div className="filter-content">
+                                        <div className="filter-left">
+                                            <ul>
+                                                <li onClick={() => {
+                                                    setFilter('week')
+                                                    setIsFilterOpen(false);
+                                                }}>Current week</li>
+                                                <li onClick={() => {
+                                                    setFilter('7days')
+                                                    setIsFilterOpen(false)
+                                                }}>Last 7 days</li>
+                                                <li onClick={() => {
+                                                    setFilter('month')
+                                                    setIsFilterOpen(false)
+                                                }}>Current month</li>
+                                                <li onClick={() => {
+                                                    setFilter('3month');
+                                                    setIsFilterOpen(false);
+                                                }}>Last 3 months</li>
+                                            </ul>
+                                        </div>
+                                        <div className="filter-right">
+                                            <Calendar onChange={(date) => {
+                                                setValue(date)
+                                                setFilter('calendar')
+                                                setIsFilterOpen(false);
+                                            }} value={value} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </div>
 
             </div>
@@ -192,8 +214,8 @@ const Myactivities = () => {
                         const total_minutes = Math.floor(total / (1000 * 60) % 60);
                         const total_seconds = Math.floor(total / (1000) % 60);
                         const formatted_total = `${total_hours.toString()} hour
-                  ${total_minutes.toString()} minutes ${total_seconds.toString().padStart(2, '0')} seconds` 
-                        return(
+                  ${total_minutes.toString()} minutes ${total_seconds.toString().padStart(2, '0')} seconds`
+                        return (
                             <div key={month} className="month-group">
                                 <h3>{month} <p className='worked'>Total hours worked: {formatted_total}</p></h3>
                                 <ul>

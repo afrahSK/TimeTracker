@@ -1,0 +1,19 @@
+:root{
+  dark-navy:#205781;
+  teal:#4F959D;
+  light-teal:#98D2C0;
+  cream:#F6F8D5;
+
+}
+:root{
+    mint:#16423C;
+    light-mint:#6A9C89;
+    ice:#C4DAD2;
+    light-ice:#E9EFEC;
+}
+:root{
+    dark-indigo:#201E43;
+    indigo:#134B70;
+    light-indigo:#508C9B;
+    cream:#EEEEEE;
+}

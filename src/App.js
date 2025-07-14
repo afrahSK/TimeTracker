@@ -38,15 +38,18 @@ const App = () => {
     <TimerContextProvider>
       <div>
       <BrowserRouter>
-        <Navbar session={session} />
+      
         {!session ? (
-          <Home />
+          <>
+          <Home session={session}/>
+          </>
         ) : (
           <div className='main'>
             <div className='left'>
               <Sidebar />
             </div>
             <div className='right'>
+              <Navbar session={session} />
               <Routes>
                 <Route path='/' element={<Track />} />
                 <Route path='/register' element={<Register />} />

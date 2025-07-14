@@ -85,7 +85,7 @@ const Account = () => {
 
         </div>
         <div className="matrics about-divs">
-          <div className='matrics-grid'>
+          <div className='matrics-grid first'>
             <div className="mat-left">
               <FolderCopyIcon className='folder-icon' fontSize='large'/>
             </div>
@@ -94,9 +94,33 @@ const Account = () => {
               <p>03</p>
             </div>
           </div>
-          <div className='matrics-grid'>Ongoing tasks</div>
-          <div className='matrics-grid'>task completed</div>
-          <div className='matrics-grid'>hours worked</div>
+          <div className='matrics-grid second'>
+            <div className="mat-left">
+              <FolderCopyIcon className='folder-icon' fontSize='large'/>
+            </div>
+            <div className="mat-right">
+              <p>Ongoing tasks</p>
+              <p>03</p>
+            </div>
+          </div>
+          <div className='matrics-grid third'>
+            <div className="mat-left">
+              <FolderCopyIcon className='folder-icon' fontSize='large'/>
+            </div>
+            <div className="mat-right">
+              <p>tasks completed</p>
+              <p>03</p>
+            </div>
+          </div>
+          <div className='matrics-grid fourth'>
+            <div className="mat-left">
+              <FolderCopyIcon className='folder-icon' fontSize='large'/>
+            </div>
+            <div className="mat-right">
+              <p>Hours worked</p>
+              <p>03</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

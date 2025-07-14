@@ -564,11 +564,11 @@ const downloadPDF = () => {
         </div>
 
         <div className="summary-cards">
-          <div className="card">
+          <div className="card one">
             <p className="label">Total Hours</p>
             <p className="value">{totalHours.toFixed(2)} hrs</p>
           </div>
-          <div className="card">
+          <div className="card two">
             <p className="label">Average Daily Hours</p>
             <p className="value">{avgDailyHours.toFixed(2)} hrs</p>
           </div>

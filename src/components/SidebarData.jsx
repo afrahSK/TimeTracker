@@ -9,32 +9,32 @@ import FolderCopyIcon from '@mui/icons-material/FolderCopy';
 export const SidebarData = [
     {
         title: "New Activity",
-        icon: <AddTaskIcon/>,
+        icon: <AddTaskIcon fontSize='small'/>,
         link: "/track"
     },
     {
         title: "My Activities",
-        icon: <AssignmentIcon/>,
+        icon: <AssignmentIcon fontSize='small'/>,
         link: "/Myactivities"
     },
     {
         title: "Reports",
-        icon: <AssessmentIcon/>,
+        icon: <AssessmentIcon fontSize='small'/>,
         link: "/Reports"
     },
     {
         title: "manage Projects",
-        icon: <FolderCopyIcon/>,
+        icon: <FolderCopyIcon fontSize='small'/>,
         link: "/projects"
     },
     {
         title: "Pomodoro",
-        icon: <TimerIcon/>,
+        icon: <TimerIcon fontSize='small'/>,
         link: "/pomodoro"
     },
     {
         title: "My Account",
-        icon: <AccountCircleIcon/>,
+        icon: <AccountCircleIcon fontSize='small'/>,
         link: "/account"
     },
 

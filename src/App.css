@@ -28,7 +28,7 @@ html,body{
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 1rem 1rem 1rem 0;
+  margin: 1rem;
   border-radius: 6px;
   background-color: var(--mint);
   height: 1rem;
@@ -44,7 +44,8 @@ html,body{
 .logo span{
   color: var(--light-blue);
   font-size: 1.85rem;
-  font-family: 'Space Mono';
+  /* font-family: 'Space Mono'; */
+  font-family: 'Lobster Two', sans-serif;
 }
 .nav-items{
   flex: 3;
@@ -383,40 +384,6 @@ html,body{
   padding-top: 1rem;
 }
 
-/* home */
-
-.home {
-  height: 100vh;
-  width: 100vw;
-  overflow-y: auto;
-}
-.main-content{
-  display: flex;
-  justify-content: center;
-  height: 100%;
-  /* background-color: red; */
-}
-.left-img{
-  flex: 50%;
-  background-image: url(../src/assets/bg-home.png);
-  background-size: cover;
-  /* background-repeat: no-repeat; */
-  margin-top: 4rem;
-  /* background-color: red; */
-}
-.left-img p{
-  font-family: 'Anton';
-text-align: center;
-}
-.left-content{
-  /* flex: 50%; */
-  background-color: red;
-}
-/* Animation */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
 
 
 /* my activities */
@@ -887,7 +854,9 @@ text-align: center;
 .matrics-grid:hover {
   cursor: pointer;
 }
-
+.mat-right p:first-child{
+  font-weight: 400;
+}
 .folder-icon {
   color: var(--mustard);
   font-size: 1.3rem;

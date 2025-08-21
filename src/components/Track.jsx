@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { supabase } from '../supabase-client.js';
 import { TimerContext } from '../context/TimerContext.js';
+
+const IDLE_TIMEOUT = 2 * 60 * 1000; // 5 minutes in milliseconds
+
 const Track = () => {
   const [session, setSession] = useState(null);
   const [logs, setLogs] = useState([]);
   const [projects, setProjects] = useState([]);
+  const [isIdle, setIsIdle] = useState(false);
+  const idleTimer = useRef(null);
+  const audioRef = useRef(null);
 
   const {
     activity,
@@ -19,6 +25,41 @@ const Track = () => {
     resumeTimer,
     resetTimer,
   } = useContext(TimerContext);
+
+  // Function to reset the idle timer
+  const resetIdleTimer = () => {
+    clearTimeout(idleTimer.current);
+    if (isRunning) {
+      setIsIdle(false);
+      idleTimer.current = setTimeout(() => {
+        setIsIdle(true);
+        // Play a sound when the user becomes idle
+        if (audioRef.current) {
+          audioRef.current.play();
+        }
+      }, IDLE_TIMEOUT);
+    }
+  };
+
+  // Add event listeners for user activity
+  useEffect(() => {
+    window.addEventListener('mousemove', resetIdleTimer);
+    window.addEventListener('keydown', resetIdleTimer);
+
+    return () => {
+      window.removeEventListener('mousemove', resetIdleTimer);
+      window.removeEventListener('keydown', resetIdleTimer);
+    };
+  }, [isRunning]);
+
+  // Start the idle timer when the main timer starts
+  useEffect(() => {
+    if (isRunning) {
+      resetIdleTimer();
+    } else {
+      clearTimeout(idleTimer.current);
+    }
+  }, [isRunning]);
 
 
   // for supabase realtime sync
@@ -142,10 +183,12 @@ const Track = () => {
 
   return (
     <>
+      <audio ref={audioRef} src="/sounds/notify.mp3" />
       {!session ? (
         <div>Login first</div>
       ) : (
         <div className="track-container">
+          {isIdle && <div className="idle-warning">You have been idle for 5 minutes.</div>}
           <div className='title'>Start an Activity</div>
           <select
             value={selectedProject || ''}
